@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}add comment{% endblock %}
+
+{% block content %}
+    {% if comment %}
+    <h2 class="text-2xl text-gray-600">Comment added</h2>
+    <p><a href="{{ post.get_absolute_url }}">Back to post»»</a></p>
+    {% else %}
+    {% include "post/include/comment_form.html" %}
+    {% endif %}
+{% endblock%}

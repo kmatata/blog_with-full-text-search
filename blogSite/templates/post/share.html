@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Share Post{% endblock %}
+
+{% block content %}
+    {% if sent %}
+        <div class="card w-96 bg-base-100 shadow-xl">
+            <div class="card-body">
+                <div class="card-actions justify-end">
+                <button class="btn btn-square btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                </div>
+                <h1 class="text-xl text-white">Email sent successfully</h1>
+                <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.</p>
+            </div>
+        </div>
+    {% else %}
+    <h2 class="text-2xl">Share "{{ post.title }}" by E-mail</h2>                
+        <div class="card image-full bg-base-100">
+            <figure><img class="" src="{{ post.postImage.url }}" alt="Album"/></figure>            
+            <div class="card-body">
+            <form action="" method="post" class="space-y-4">
+                {% csrf_token %}                                
+                    <div class="form-control">
+                        <label class="label text-xs text-black" for="">
+                            {{ form.name }}
+                        </label>
+                    </div>                                       
+                    <div class="form-control">
+                        <label class="label text-xs text-black" for="">
+                            {{ form.to }}
+                        </label>
+                    </div> 
+                    <div class="form-control text-black">                        
+                        {{ form.comments }}                        
+                    </div>                                       
+                    <div class="card-actions justify-end">
+                        <input class="btn btn-primary" type="submit" value="send-email">
+                    </div>                
+            </form>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<div class="card card-compact w-full bg-white shadow-xl">    
+    <form action="{% url 'blog:post_comment' post.id %}" method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            <h2 class="card-title">Add Comment</h2> 
+            <div class="form-control border border-gray-400 rounded-xl">
+                <label class="label text-xs text-black" for="">
+                    {{ form.name }}
+                </label>
+            </div>      
+            <div class="form-control border border-gray-400 rounded-xl">
+                <label class="label text-xs text-black" for="">
+                    {{ form.email }}
+                </label>
+            </div>      
+            <div class="form-control border border-gray-400 rounded-xl">
+                <label class="label text-xs text-black" for="">
+                    {{ form.body }}
+                </label>
+            </div>                             
+            <div class="card-actions justify-end">
+                <button type="submit" class="btn btn-primary">post</button>
+            </div>
+        </div>
+    </form>
+</div>

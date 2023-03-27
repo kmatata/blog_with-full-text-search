@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Matata's blog{% endblock %}
+
+{% block content %}       
+    {% for post in posts %}                      
+    <div class="text-black card rounded-md self-start card-compact bg-white space-y-0.5">                                                               
+        <figure class="md:px-5"><img class="md:rounded-xl w-full" src="{{ post.postImage.url }}" alt=""></figure>
+        <div class="card-body">
+            <h2 class="card-title">                    
+                <a href="{{ post.get_absolute_url }}" class="hover:text-sky-700/50">{{ post.title }}</a>
+            </h2>
+            <p class="text-sky-400/75">Published {{ post.publish|naturalday }} by {{ post.author }}</p>
+            <p class="text-lg">{{ post.summary }}</p>
+            <div class="card-actions justify-end">
+                <a class="link link-hover text-sky-600" href="{{ post.get_absolute_url }}">read more</a>
+            </div>
+        </div>
+    </div> 
+    {% endfor %} 
+    {% include "pagination.html" with page=page_obj %}                
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<div class="text-black card self-start card-compact bg-white space-y-0.5">                                                               
+    <figure class="md:px-5"><img class="md:rounded-xl" src="{{ post.postImage.url }}" alt=""></figure>
+    <div class="card-body">
+        <h2 class="card-title">                    
+            {{ post.title }}                    
+        </h2>
+        <p class="text-sky-400/75">Published {{ post.publish|naturalday }} by {{ post.author }}</p>
+        <p class="text-lg">{{ post.body }}</p> 
+        <p class="text-lg text-pink-700 link-hover">
+            <a href="{% url 'blog:post_share' post.id %}">share post</a>
+        </p>       
+    </div>
+</div> 
+<div class="self-start card card-compact w-full bg-white mt-10 text-gray-800/75 shadow-xl">    
+    <div class="card-body">
+        {% with comments.count as total_comments %}
+        <h2 class="card-title">{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+        {% endwith %}
+        {% for comment in comments %}
+            <div class="card w-full bg-white shadow-xl">
+                <div class="card-body">              
+                    <h2 class="card-title">{{comment.name}} {{ comment.created|naturaltime }}</h2>
+                    <p>{{ comment.body|linebreaks }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <div class="card w-full bg-white shadow-xl">
+                <div class="card-body">                                  
+                    <p>Be the first to comment!</p>
+                </div>
+            </div>
+        {% endfor %}
+        {% include "post/include/comment_form.html" %}
+    </div>
+</div>
+{% endblock%}

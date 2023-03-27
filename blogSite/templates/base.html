@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" class="bg-white">
+<head>    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'mn_css/output.css' %}" type="text/css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+
+        .font-family-karla {
+            font-family: karla;
+        }
+    </style>
+</head>
+<body class="md:overflow-x-hidden font-family-karla">
+    <div id="main-page" class="container mx-auto flex flex-wrap py-6 relative">
+        <section id="content" class=" space-y-4 w-full md:w-3/4 flex flex-col items-center md:px-6">
+            <header class="self-start">
+                <a href="#" class="font-bold text-gray-800 uppercase hover:text-gray-500 text-5xl">Matata's Blog</a>
+            </header>
+            {% block content %}
+            {% endblock %}
+        </section>
+        <aside id="sidebar" class="w-full md:w-1/4 flex flex-col mt-2 md:m-0 md:absolute md:top-0 md:right-0 bg-gray-400">
+            <div class="text-black py-12 px-6 space-y-4">
+                <h2 class="text-center text-2xl">Matata's blog</h2>
+                <p class="text-center">For all things tech, business or politics explore here. </p>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
