@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from PIL import Image
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 # Create your models here.
@@ -35,6 +36,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)    
     body = models.TextField()
+    tags = TaggableManager()
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='blog_posts')
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -64,7 +66,7 @@ class Post(models.Model):
     def summary(self):
         return self.body[:50] + ' ...'
 
-    @property
+    
     def get_absolute_url(self):
         return reverse("blog:post_detail",args=[self.publish.month,self.publish.day,self.publish.year,self.slug])
 

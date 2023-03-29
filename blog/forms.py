@@ -14,3 +14,6 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('name','email','body',)
+
+class SearchForm(forms.Form):
+    query = forms.CharField(required=True,widget=forms.TextInput(attrs={"placeholder":"search?","class":"bg-white input input-secondary w-full input-xs max-w-xs"}))

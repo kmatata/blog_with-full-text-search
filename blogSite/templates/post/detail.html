@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load blog_tags %}
 {% load humanize %}
+
 
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
@@ -11,13 +12,31 @@
             {{ post.title }}                    
         </h2>
         <p class="text-sky-400/75">Published {{ post.publish|naturalday }} by {{ post.author }}</p>
-        <p class="text-lg">{{ post.body }}</p> 
+        {{ post.body|markdown }}
         <p class="text-lg text-pink-700 link-hover">
             <a href="{% url 'blog:post_share' post.id %}">share post</a>
         </p>       
     </div>
 </div> 
-<div class="self-start card card-compact w-full bg-white mt-10 text-gray-800/75 shadow-xl">    
+<h2 class="text-2xl">Similar posts</h2>
+<div class="self-start mt-10  md:carousel md:carousel-end border border-gray-500 rounded-box">    
+    {% for post in similar_posts %}
+    <div class="carousel-item">
+        <div class="card card-compact w-full bg-white shadow-xl">
+            <figure><img src="{{ post.postImage.url }}" alt="Shoes" /></figure>
+            <div class="card-body">
+                <h2 class="link link-hover card-title">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h2>
+                <p>{{ post.summary }}</p>              
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p>No similar posts at the moment back<a class="link link-hover" href="{% url 'blog:post_list' %}">Home</a></p>
+    {% endfor %}
+</div>
+<div class="self-start card card-compact w-full bg-white mt-14 text-gray-800/75 shadow-xl">    
     <div class="card-body">
         {% with comments.count as total_comments %}
         <h2 class="card-title">{{ total_comments }} comment{{ total_comments|pluralize }}</h2>

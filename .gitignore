@@ -289,4 +289,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-/static/mn/css/output.css
+# tailwind file css
+/blogSite/static/mn_css/output.css
