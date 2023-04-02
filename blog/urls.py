@@ -11,5 +11,6 @@ urlpatterns = [
     path('<int:month>/<int:day>/<int:year>/<slug:post>/', views.post_detail, name='post_detail'),
     path('<int:post_id>/share/', views.post_share,name='post_share'),
     path('<int:post_id>/comment',views.post_comment,name='post_comment'),
+    path('postSearcher/',views.post_search),    
     
 ]

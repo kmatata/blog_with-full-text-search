@@ -1,0 +1,28 @@
+
+<div x-data="fetchResults()" @click.outside="close;search=''" class="z-10 flex flex-col relative md:space-y-8 mb-2 space-y-8 py-4 bg-white sticky top-0">
+    <div class="container mx-auto w-full md:p-2 py-2 flex font-medium">                    
+        <input @input="toggle" x-model="search" type="text" placeholder="recherche si vous plait" class="absolute md:right-1/2 px-2 py-0.5 md:w-1/3 w-full text-black bg-white border-2 rounded-full border-gray-400"/>                            
+        <a href=""><i style="color:black" class="absolute right-2 md:right-1/2 p-2 fa-solid fa-magnifying-glass fa-md"></i></a>                                   
+    </div> 
+    <div class="space-y-8 w-full" x-show="open"  x-transition.500ms>
+        <div class="container mx-auto z-10 font-medium w-full md:p-1">
+            <div class="md:w-1/3 w-full px-2 flex bg-white space-x-2 overflow-x-auto scrollbar rounded-t-2xl  absolute md:right-1/2">            
+                {% for altag in allTags %}
+                    <a class="btn btn-xs rounded-full btn-outline" href="{% url 'blog:post_list_by_tag' altag.slug %}">
+                        {{ altag }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div @click.outside="close;search=''" class="container mx-auto w-full font-medium flex flex-col md:p-2">        
+            <div class="md:w-1/3 w-full px-4 rounded-b-2xl bg-white absolute md:right-1/2 shadow-xl">            
+                <template x-for="post in filteredPosts" class="relative">
+                    <ul>
+                        <li x-text="post.title"></li><a class=" absolute w-full text-transparent" :href="post.url">...</a>
+                    </ul>                    
+                </template>
+            </div>
+        </div>
+    </div>
+</div>    
+ 

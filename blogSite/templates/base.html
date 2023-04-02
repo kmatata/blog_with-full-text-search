@@ -9,8 +9,9 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script
-			src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer>
-	</script>		
+        defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js">
+    </script>
+			
     <link rel="stylesheet" href="{% static 'mn_css/output.css' %}" type="text/css"/>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
@@ -20,33 +21,21 @@
         }
     </style>
 </head>
-<body class="md:overflow-x-hidden font-family-karla">
-    <header class="sticky top-0 z-0 bg-gray-800/50 rounded-b-xl w-full md:w-3/4 p-5">
-        <a href="{% url 'blog:post_list' %}" class="font-bold text-black uppercase hover:text-gray-500 text-5xl">Matata's Blog</a>
-    </header>
-    <div tabindex="0" x-data="{}" class="sticky top-0 z-20 md:self-start p-5 md:w-3/4 self-center w-full collapse collapse-open focus:border focus:border-base-300 bg-white rounded-b-xl"> 
-        <div class="collapse-title text-xl flex font-medium relative">                    
-            <input type="text" placeholder="search" class="input w-full text-black bg-white hover:input-bordered"/>                            
-            <i style="color:black" class="absolute right-20 top-10 fa-solid fa-magnifying-glass fa-sm"></i>                                   
-        </div>    
-        <div class="collapse-content flex flex-wrap space-y-1 justify-between">             
-            {% for altag in allTags %}
-                <a class="btn btn-xs sm:btn-sm rounded-full btn-outline" href="{% url 'blog:post_list_by_tag' altag.slug %}">
-                    {{ altag }}
-                </a>
-            {% endfor %}            
-        </div>    
-    </div>
-    <div id="main-page" class="scroll-smooth container mx-auto flex flex-wrap py-6 relative">                
+<body x-data="dropdown" class="md:overflow-x-hidden font-family-karla">
+    <header @click="close;search=''" class="sticky top-0 z-0 bg-gray-800/50 rounded-b-md w-full px-5 md:w-3/4">
+        <a href="{% url 'blog:post_list' %}" class="font-bold text-black uppercase hover:text-gray-500 text-4xl">Matata's Blog</a>
+    </header>        
+    {% show_all_tags %}
+    <div id="main-page" @click="close;search=''" class="scroll-smooth container mx-auto flex flex-wrap py-6 relative">                
         <section id="content" class=" space-y-4 w-full md:w-3/4 flex flex-col items-center mb-5 md:px-6">                        
             {% block content %}
             {% endblock %}
         </section>
         <aside id="sidebar" class="w-full z-30 md:w-1/4 flex md:flex-col flex-col-reverse md:fixed md:top-0 md:right-8">
-            <div class="text-black rounded-xl md:rounded-t-none md:rounded-b-lg flex bg-gray-400 flex-col items-center py-10 px-6 space-y-4">
+            <div class="text-gray-400/50 rounded-xl md:rounded-t-none md:rounded-b-lg flex bg-base-100 flex-col items-center py-10 px-6 space-y-4">
                 <h2 class="text-center text-2xl">Matata's blog</h2>
                 <p class="text-center">For all things tech, business or politics explore here. </p>
-                <div class="bg-primary z-30 outline md:outline-0 outline-4 outline-white outline-offset-4 text-black stats shadow">  
+                <div class="bg-primary z-30 md:border-0 border-t-4 border-white text-black stats shadow">  
                     <div class="stat">
                         <div class="stat-figure text-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
@@ -64,6 +53,63 @@
         </aside> 
              
     </div>
+
+<script>
+    let getCookie = (name) => {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     
+
+    let fetchResults = () => {
+        return {
+            search : '',                        
+            async filteredPosts () {                
+                let response = await fetch('/blog/postSearcher/', {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'applicaton/json',
+                        'X-CSRFToken':getCookie('csrftoken') 
+                    },
+
+                    body:JSON.stringify({"postsSearch":this.search}),
+                    credentials:"same-origin"
+                }) 
+                let result = await response.json()                                                                               
+                console.log(result['results'])
+                return result['results']
+            }
+        }
+    }
+    let goTo = async(url) => {
+        await console.log(url)
+    }
+
+</script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('dropdown', () => ({
+            open: false,            
+            toggle() {
+                this.open = true
+            },
+            close() {
+                this.open = false
+            }
+        }))
+    })
+</script>
 </body>
 </html>
