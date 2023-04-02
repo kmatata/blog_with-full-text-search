@@ -1,3 +1,8 @@
+#responsive design with tailwind-breakpoints:
+
+![respoBlg](https://user-images.githubusercontent.com/95537935/229350131-37b3fcbc-5ac9-4e52-ab80-27fde4a16a56.gif)
+
+
 # Blog with live search functionality
 
 # included
